@@ -1,0 +1,4 @@
+Apache_Subversion:https://svn.apache.org/repos/asf/subversion/
+OpenKM:http://svn.code.sf.net/p/openkm/code/trunk/
+OpenKM:http://svn.code.sf.net/p/openkm/code/branches/6.3/
+SpamAssassin:http://svn.apache.org/repos/asf/spamassassin/trunk/
