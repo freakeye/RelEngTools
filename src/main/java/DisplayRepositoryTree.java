@@ -1,5 +1,5 @@
 /**
- * Created by almi1016 on 16-Jan-18.
+ * Created by freakeye on 16-Jan-18.
  * source: https://svn.svnkit.com/repos/svnkit/tags/1.3.5/doc/examples/
  * src/org/tmatesoft/svn/examples/repository/DisplayRepositoryTree.java
  */
@@ -27,23 +27,6 @@ public class DisplayRepositoryTree {
          * initializes the library (it must be done before ever using the library itself)
          */
         setupLibrary();
-
-        /*
-        if (args != null) {
-            /*
-             * obtains a repository location URL
-             */
-//            url = (args.length >= 1) ? args[0] : url;
-            /*
-             * obtains an account name (will be used to authenticate the user to
-             * the server)
-             */
-//            name = (args.length >= 2) ? args[1] : name;
-            /*
-             * obtains a password
-             */
-//            password = (args.length >= 3) ? args[2] : password;
-//        }
 
 
     SVNRepository repository = null;
@@ -82,9 +65,9 @@ public class DisplayRepositoryTree {
          *
          * You may also skip this point - anonymous access will be used.
          */
-
         ISVNAuthenticationManager
-                authManager = SVNWCUtil.createDefaultAuthenticationManager(reviewPOMs.SVN_NAME, reviewPOMs.SVN_PSWD);
+                authManager = SVNWCUtil
+                .createDefaultAuthenticationManager(reviewPOMs.SVN_NAME, reviewPOMs.SVN_PSWD);
                 // authManager = new BasicAuthenticationsManager(userName, userPassword);
         repository.setAuthenticationManager(authManager);
 
@@ -122,12 +105,12 @@ public class DisplayRepositoryTree {
              * the path/to/repository directory)
              */
             listEntries(repository, "");
+
         } catch (SVNException svne) {
             System.err.println("error while listing entries: "
                     + svne.getMessage());
             System.exit(1);
         }
-
 
         /*
          * Gets the latest revision number of the repository
@@ -144,7 +127,6 @@ public class DisplayRepositoryTree {
         System.out.println("");
         System.out.println("---------------------------------------------");
         System.out.println("Repository latest revision: " + latestRevision);
-        //System.exit(0);
 
     }
 
@@ -157,15 +139,6 @@ public class DisplayRepositoryTree {
          * For using over http:// and https://
          */
         DAVRepositoryFactory.setup();
-        /*
-         * For using over svn:// and svn+xxx://
-         */
-       // SVNRepositoryFactoryImpl.setup();
-
-        /*
-         * For using over file:///
-         */
-        //FSRepositoryFactory.setup();
     }
 
     /*
@@ -202,13 +175,15 @@ public class DisplayRepositoryTree {
         while (iterator.hasNext()) {
             SVNDirEntry entry = (SVNDirEntry) iterator.next();
 
-            String entyStr = (path.equals("") ? "" : path + "/") + entry.getName()
-                    + "| revision: " + entry.getRevision();
-            System.out.println(entyStr);
+            String entryStr = (path.equals("") ? "" : path + "/") + entry.getName();
+            System.out.println(entryStr);
 
-            //
-            if (entyStr.contains(reviewPOMs.SCOPE)) {
-                reviewPOMs.pomList.add(entyStr);
+            /*
+             * add entryStr with substring @reviewPOMs.SCOPE
+             * e.g: "pom.xml" to list @pomList
+             */
+            if (entryStr.contains(reviewPOMs.SCOPE)) {
+                reviewPOMs.pomList.add(entryStr);
             }
 
             /*
@@ -220,5 +195,4 @@ public class DisplayRepositoryTree {
             }
         }
     }
-
 }

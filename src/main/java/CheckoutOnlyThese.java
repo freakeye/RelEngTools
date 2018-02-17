@@ -11,7 +11,7 @@ public class CheckoutOnlyThese {
 
     public static void main(String args[]) {
 
-        System.out.println("\tTest of this program");
+        System.out.println("\tTest of CheckoutOnlyThese");
 
         return ;
     }

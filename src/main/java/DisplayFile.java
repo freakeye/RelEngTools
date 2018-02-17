@@ -1,3 +1,9 @@
+/**
+ * Created by freakeye on 18-Jan-18.
+ * source: https://svn.svnkit.com/repos/svnkit/tags/1.3.5/doc/examples/
+ *
+ */
+
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -7,12 +13,6 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
-
-/**
- * Created by almi1016 on 18-Jan-18.
- * source: https://svn.svnkit.com/repos/svnkit/tags/1.3.5/doc/examples/
- *
- */
 
 /*
  * This example shows how to fetch a file and its properties from the repository
@@ -24,11 +24,17 @@ import java.util.Iterator;
 public class DisplayFile {
 
 
-//    public static String url = "https://svncn.netcracker.com/videotron.cube/branches/iter5_stab";
-    public static String filePath = "DDRS/descriptors/pom.xml";
+    public static String filePath;
 
-    public static void main(String url) {
+    // this string contains pom.xml
+    //
+    public static String pomAsSrting;
 
+    // return @pomAsString and display pom.xml
+    //
+    public static String main(String file) {
+
+        filePath = file;
         SVNRepository repository = null;
         try {
             /*
@@ -37,14 +43,13 @@ public class DisplayFile {
              * repository location used to create this SVNRepository.
              * SVNURL is a wrapper for URL strings that refer to repository locations.
              */
-            repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(url));
+            repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(reviewPOMs.url));
         } catch (SVNException svne) {
             /*
              * Perhaps a malformed URL is the cause of this exception
              */
             System.err
-                    .println("error while creating an SVNRepository for the location '"
-                            + url + "': " + svne.getMessage());
+                    .println("error while creating an SVNRepository for the location '");
             System.exit(1);
         }
 
@@ -64,14 +69,13 @@ public class DisplayFile {
          *
          * You may also skip this point - anonymous access will be used.
          */
-        ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(reviewPOMs.SVN_NAME, reviewPOMs.SVN_PSWD);
+        ISVNAuthenticationManager authManager = SVNWCUtil
+                .createDefaultAuthenticationManager(reviewPOMs.SVN_NAME,
+                        reviewPOMs.SVN_PSWD);
         repository.setAuthenticationManager(authManager);
 
-        /*
-         * This Map will be used to get the file properties. Each Map key is a
-         * property name and the value associated with the key is the property
-         * value.
-         */
+        //
+        //
         SVNProperties fileProperties = new SVNProperties();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -84,13 +88,14 @@ public class DisplayFile {
             SVNNodeKind nodeKind = repository.checkPath(filePath, -1);
 
             if (nodeKind == SVNNodeKind.NONE) {
-                System.err.println("There is no entry at '" + url + "'.");
+                System.err.println("There is no entry at '" + reviewPOMs.url + "'.");
                 System.exit(1);
             } else if (nodeKind == SVNNodeKind.DIR) {
-                System.err.println("The entry at '" + url
+                System.err.println("The entry at '" + reviewPOMs.url
                         + "' is a directory while a file was expected.");
                 System.exit(1);
             }
+
             /*
              * Gets the contents and properties of the file located at filePath
              * in the repository at the latest revision (which is meant by a
@@ -123,8 +128,7 @@ public class DisplayFile {
         while (iterator.hasNext()) {
             String propertyName = (String) iterator.next();
             String propertyValue = fileProperties.getStringValue(propertyName);
-            System.out.println("File property: " + propertyName + "="
-                    + propertyValue);
+
         }
         /*
          * Displays the file contents in the console if the file is a text.
@@ -133,7 +137,11 @@ public class DisplayFile {
             System.out.println("File contents:");
             System.out.println();
             try {
-                baos.writeTo(System.out);
+
+                // convert to String
+                //
+                pomAsSrting = baos.toString("UTF-8");
+
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
@@ -141,20 +149,7 @@ public class DisplayFile {
             System.out
                     .println("File contents can not be displayed in the console since the mime-type property says that it's not a kind of a text file.");
         }
-        /*
-         * Gets the latest revision number of the repository
-         */
-        long latestRevision = -1;
-        try {
-            latestRevision = repository.getLatestRevision();
-        } catch (SVNException svne) {
-            System.err.println("error while fetching the latest repository revision: " + svne.getMessage());
-            System.exit(1);
-        }
-        System.out.println("");
-        System.out.println("---------------------------------------------");
-        System.out.println("Repository latest revision: " + latestRevision);
-//        System.exit(0);
-    }
 
+        return pomAsSrting;
+    }
 }
