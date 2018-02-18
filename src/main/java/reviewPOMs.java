@@ -83,7 +83,7 @@ System.out.println("Job: " + job + "\tURL: " + url + "\nPOM file is: " + pomFile
             System.out.println("~~~~~~~~~~~~~~~~~~~~\n\npomList.size = " + pomList.size());
             writeListToFile(pomList, pomFileName);
 
-            // reading pomList
+            // reading pomList from arraylist
             //
             for (String str : pomList) {
                 String tmpString = DisplayFile.main(str);
@@ -133,6 +133,7 @@ System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n File has been creat
             //
             for (String str : inpList) {
                 bufWr.write(str);
+                bufWr.newLine();
                 bufWr.flush();
             }
         } catch (UnsupportedEncodingException | FileNotFoundException exc) {
