@@ -31,9 +31,8 @@ public class SVNHandler {
     private static ISVNAuthenticationManager authManager = null;
 
     public static String repoPath = "";
-    public static final String PROJECT_NAME = "228_10.2.3.TFNECU.";
-//    public static final String PROJECT_NAME = "000_REINT.";
-    public static final String COMMIT_MESSAGE = "[RE] tag created, due to REPROJ-29623";
+    public static final String PROJECT_NAME = "projectName_as_prefix";
+    public static final String COMMIT_MESSAGE = "[RE] tag created, due to JIRA-ticket";
     public static String deliverable = "";
 
     // tag params
