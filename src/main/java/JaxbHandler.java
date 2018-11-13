@@ -2,11 +2,12 @@
 https://javadevblog.com/primer-raboty-s-jaxb-sohranyaem-java-ob-ekt-v-xml-vosstanavlivaem-ob-ekt-iz-xml.html
  */
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
 import java.io.File;
 
+// Обработка config.xml
+// TODO: нужна xsd-схема и её компилировать тулой
+//
 public class JaxbHandler {
 
     private static Configuration result = null;
@@ -20,7 +21,6 @@ public class JaxbHandler {
             Unmarshaller unmXmlToObj = jaxbContext.createUnmarshaller();
 
             result = (Configuration) unmXmlToObj.unmarshal(file);
-
         } catch (JAXBException e) {
             e.printStackTrace();
         }

@@ -2,10 +2,9 @@
 //
 //package releng.vcs.svn-tagging;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 @XmlRootElement(name = "configuration")
@@ -47,7 +46,7 @@ public class Configuration {
         this.commitMessage = commitMessage;
     }
 
-    public void obsAsString() {
+    public void objAsString() {
         System.out.println("{ Configuration\n" +
                 "projectPrefix= " + projectPrefix + "\n" +
                 "dateFormat= " + dateFormat + "\n" +
@@ -57,7 +56,4 @@ public class Configuration {
                 "tagPostfix= " + tagPostfix + "\n" +
                 "commitMessage= " + commitMessage + "}\n");
     }
-
-
 }
-
