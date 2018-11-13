@@ -25,22 +25,32 @@ import static org.tmatesoft.svn.core.SVNErrorMessage.create;
 
 public class SVNHandler {
 
+
+/* TODO:
+    Класс не должен знать о параметрах из конфига!
+    Конфиги читаются спец. классом, кот. вызывается из main-класса SVNTagging
+
+ */
+
     // auth parameters
     private static String SVN_LOGIN = "";
     private static String SVN_PASWD = "";
     private static ISVNAuthenticationManager authManager = null;
 
     public static String repoPath = "";
-    public static final String PROJECT_NAME = "projectName_as_prefix";
-    public static final String COMMIT_MESSAGE = "[RE] tag created, due to JIRA-ticket";
     public static String deliverable = "";
 
+    public static final String PROJECT_NAME = "228_10.2.3.TFNECU.";
+    //    public static final String PROJECT_NAME = "000_REINT.";
+    public static final String COMMIT_MESSAGE = "[RE] tag created, due to REPROJ-29623";
     // tag params
     public static final String DIR_FOR_TAGS = "release-tags";
 //    public static final String DIR_FOR_TAGS = "tags";
     public static final String BRANCHES_WORD = "branches/";
-    public static final String RIGHT_SLASH = "/";
     public static final String DATE_FORMAT = "yyyy.MM.dd";
+
+
+    public static final String RIGHT_SLASH = "/";
     // delimeter
     public static final String _ = "_";
 
@@ -62,6 +72,7 @@ public class SVNHandler {
         authManager = SVNWCUtil.createDefaultAuthenticationManager(login, paswd);
     }
 
+    // if branchURL doesn't exist - is throught svnExc
     public static long getLastRevision(String branchURL) {
 
         long result = -1;
@@ -84,20 +95,20 @@ public class SVNHandler {
     }
 
     // TODO: Test - is there @DIR_FOR_TAGS in @repoPath - ?
-    // TODO: Test - is there tag on @revision - ?
+
 
     //
     //
     //
-    public static boolean createTag(String branchUrl, long revision, String tagName) {
+    public static boolean createTag(String branchUrl, long revision,String tagDestinationPath) {
         boolean result = false;
 
-        repoPath = branchUrl.substring(0, branchUrl.indexOf(BRANCHES_WORD));                    // URL-address of repo
+//System.out.println("repoPath: " + repoPath + " | deliverable: " + deliverable + " | -m: " + COMMIT_MESSAGE);
+//System.out.println("\ntagName : " + tagName);
+System.out.println("\ntagDestinationPath : " + tagDestinationPath);
 
-System.out.println("repoPath: " + repoPath + " | deliverable: " + deliverable + " | -m: " + COMMIT_MESSAGE);
-System.out.println("\ntagName : " + tagName);
-
-        if ( ! tagName.isEmpty() ) {
+        // TODO: Test - is there tag on @revision - ?
+        // if
 
             try {
 //                final SvnList list = new SvnOperationFactory().createList();
@@ -113,11 +124,9 @@ System.out.println("\ntagName : " + tagName);
                 tagOperation.addCopySource(sourceObject);
 
                 // setup destination
-                String tagDestinationPath = repoPath + DIR_FOR_TAGS + "/" + tagName;
                 SVNURL destinationURL = SVNURL.parseURIEncoded(tagDestinationPath);
                 tagOperation.setSingleTarget(SvnTarget.fromURL(destinationURL));
 System.out.println("destinationURL is: " + destinationURL);
-
 
                 // Make the operation fail when destination exists
                 tagOperation.setFailWhenDstExists(true);
@@ -132,12 +141,14 @@ System.out.println("destinationURL is: " + destinationURL);
                 svnExc.printStackTrace();
                 System.exit(1);
             }
-        }
+//        }
+
         return result;
     }
 
-
-    // tag_2018.08.16_228_10.2.3.TFNECU.SSP.Release1.Drop1.Fix12_rev7974
+    // prepare tag name
+    // short tag name: tag_2018.08.16_228_10.2.3.TFNECU.SSP.Release1.Drop1.Fix12_rev7974
+    // full: https://svncn.netcracker.com/TFNECU.TOMS.SSP/release-tags/tag_2018.11.09_228_10.2.3.TFNECU.SSP.Release1.CD9_rev8736
     //
     static String makeTagName(String branchUrl, long revision) {
         String result = "",
@@ -150,8 +161,17 @@ System.out.println("destinationURL is: " + destinationURL);
                 deliverable = deliverable.replace(RIGHT_SLASH, _);
             }
 
+            // short tag name
             result = "tag" + _ + date + _ + PROJECT_NAME + deliverable + _ + "rev" + revision;
+
+            // full tag name
+            // URL-address of repo
+            repoPath = branchUrl.substring(0, branchUrl.indexOf(BRANCHES_WORD));
+            // url address of tag - is tag destination path
+            result = repoPath + DIR_FOR_TAGS + "/" + result;
         }
+System.out.println("\ntagDestinationPath : " + result);
         return result;
     }
+
 }
